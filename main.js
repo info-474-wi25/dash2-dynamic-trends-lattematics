@@ -4,7 +4,7 @@ const width = 900 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
 
 // Create SVG containers for both charts
-const svg1_RENAME = d3.select("#lineChart1") // If you change this ID, you must change it in index.html too
+const svg1_max = d3.select("#lineChart1") // If you change this ID, you must change it in index.html too
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -58,10 +58,25 @@ d3.csv("weather.csv").then(data => {
     console.log("Pivoted data:", pivotedData);
 
     // 3.a: SET SCALES FOR CHART 1
+    const xScale = d3.scaleLinear()
+        .domain(d3.extent(pivotedData, d => d.date))
+        .range([0, width]);
 
+    const yScale = d3.scaleLinear()
+        .domain([0, d3.max(pivotedData, d => d.maxTemperature)])
+        .range([height, 0]);
 
     // 4.a: PLOT DATA FOR CHART 1
+    const line = d3.line()
+        .x(d => xScale(d.date))
+        .y(d => yScale(d.maxTemperature));
 
+    svg1_max.append("path")
+        .datum(pivotedData) 
+        .attr("d", line) 
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
 
     // 5.a: ADD AXES FOR CHART 1
 
