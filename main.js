@@ -44,9 +44,9 @@ d3.csv("weather.csv").then(data => {
 
 
     const pivotedData = groupedData.flatMap(({ date, actualMax, avgMax, recordMax }) => [
-        { date, maxTemperature: actualMax, measurement: "Actual" },
-        { date, maxTemperature: avgMax, measurement: "Average" },
-        { date, maxTemperature: recordMax, measurement: "Record" }
+        { date, maxTemperature: actualMax, measurement: "Actual Max" },
+        { date, maxTemperature: avgMax, measurement: "Average Max" },
+        { date, maxTemperature: recordMax, measurement: "Record Max" }
     ]);
         //console.log("Pivoted data:", pivotedData);
 
@@ -64,7 +64,7 @@ d3.csv("weather.csv").then(data => {
     
     const colorScale = d3.scaleOrdinal()
         .domain(maxType)
-        .range(d3.schemeCategory10);
+        .range(["#11b400", "#0a6900", "#f1c800"]);
 
     // 4.a: PLOT DATA FOR CHART 1
     const lineData = d3.groups(pivotedData, d => d.measurement);
@@ -93,8 +93,49 @@ d3.csv("weather.csv").then(data => {
         .call(d3.axisLeft(yScale));
 
     // 6.a: ADD LABELS FOR CHART 1
+    svg1_max.append("text")
+        .attr("x", width / 2)
+        .attr("y", -margin.top / 2)
+        .attr("text-anchor", "middle")
+        .text("THIS CITY")
+        .style("font-size", "16px")
+        .style("font-weight", "bold");
 
+    svg1_max.append("text")
+        .attr("class", "axis-label")
+        .attr("x", width / 2)
+        .attr("y", height + margin.bottom - 10)
+        .attr("text-anchor", "middle")
+        .text("Date");
 
+    svg1_max.append("text")
+        .attr("class", "axis-label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 20)
+        .attr("x", -height / 2)
+        .attr("text-anchor", "middle")
+        .text("Temperature (°F)");
+
+    const legend = svg1_max.selectAll(".legend")
+        .data(lineData)
+        .enter()
+        .append("g")
+        .attr("class", "legend")
+        .attr("transform", (d, i) => `translate(${width - 150}, ${i * 20 - 30})`);
+
+    legend.append("rect")
+        .attr("x", -50)
+        .attr("width", 10)
+        .attr("height", 10)
+        .style("fill", colorScale);
+
+    legend.append("text")
+        .attr("x", -30)
+        .attr("y", 5)
+        .attr("text-anchor", "start")
+        .style("alignment-baseline", "middle")
+        .text((d, i) => maxType[i]);
+        
     // 7.a: ADD INTERACTIVITY FOR CHART 1
     
 
