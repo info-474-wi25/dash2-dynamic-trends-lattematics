@@ -11,13 +11,6 @@ const svg1_max = d3.select("#lineChart1") // If you change this ID, you must cha
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-const svg2_RENAME = d3.select("#lineChart2")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-
 // (If applicable) Tooltip element for interactivity
 // const tooltip = ...
 
@@ -33,11 +26,11 @@ d3.csv("weather.csv").then(data => {
         d.avgMax = +d.average_max_temp;
         d.recordMax = +d.record_max_temp;
     });
-    console.log("Raw data:", data);
+        //console.log("Raw data:", data);
 
 
     const filteredData = data.filter(d => d.city_full === "Indianapolis, IN");
-    console.log("Filtered data 1:", filteredData);
+        //console.log("Filtered data 1:", filteredData);
 
 
     const groupedData = d3.groups(filteredData, d => d.date)
@@ -47,7 +40,7 @@ d3.csv("weather.csv").then(data => {
         avgMax: d3.mean(entries, e => e.avgMax),
         recordMax: d3.mean(entries, e => e.recordMax)
     }));
-    console.log("Grouped data:", groupedData);
+        //console.log("Grouped data:", groupedData);
 
 
     const pivotedData = groupedData.flatMap(({ date, actualMax, avgMax, recordMax }) => [
@@ -55,7 +48,7 @@ d3.csv("weather.csv").then(data => {
         { date, maxTemperature: avgMax, measurement: "Average" },
         { date, maxTemperature: recordMax, measurement: "Record" }
     ]);
-    console.log("Pivoted data:", pivotedData);
+        //console.log("Pivoted data:", pivotedData);
 
     // 3.a: SET SCALES FOR CHART 1
     const xScale = d3.scaleLinear()
@@ -66,20 +59,68 @@ d3.csv("weather.csv").then(data => {
         .domain([0, d3.max(pivotedData, d => d.maxTemperature)])
         .range([height, 0]);
 
-    // 4.a: PLOT DATA FOR CHART 1
-    const line = d3.line()
-        .x(d => xScale(d.date))
-        .y(d => yScale(d.maxTemperature));
+    
+        /*    const tempCategories = ["actualMax", "avgMax", "recordMax"];
 
-    svg1_max.append("path")
-        .datum(pivotedData) 
-        .attr("d", line) 
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 2)
-        .attr("fill", "none");
+
+                const categories = d3.rollup(tempCategories,
+                    v => d3.rollup(v,
+                        values => values.length,
+                        d => d.date
+                    ),
+                    d => d.categoryGroup
+                );
+
+
+                const colorScale = d3.scaleOrdinal()
+                    .domain(Array.from(categories.keys()))
+                    .range(d3.schemeCategory10); */
+
+    // 4.a: PLOT DATA FOR CHART 1
+    const grouped = d3.group(pivotedData, d => d.measurement);
+        console.log(grouped)
+
+     const line = d3.line()
+        .x(d => xScale(d.date))
+        .y(d => yScale(d.maxTemperature)); 
+
+    const lineData = Array.from(grouped.entries());
+
+    svg1_max.selectAll("path")
+        .data(lineData)
+        .enter()
+        .append("path")
+        .attr("class", "data-line")
+        .attr("d", d => {
+            const category = d[0];
+            const map = d[1];
+            const values = Array.from(map.entries())
+                .map(([date, maxTemperature]) => ({ date, maxTemperature }));
+            return line(values);
+        })
+        .style("stroke", "steelblue")
+        .style("fill", "none")
+        .style("stroke-width", 2);
+
+    
+    /*    svg1_max.selectAll("path")
+            .data(grouped)
+            .enter()
+            .append("path")
+            .attr("class", "data-line")
+            .attr("d", d3.line()
+                .x(d => xScale(d.date))
+                .y(d => yScale(d.maxTemperature))
+            ) */
 
     // 5.a: ADD AXES FOR CHART 1
+    svg1_max.append("g")
+        .attr("transform", `translate(0,${height})`)
+        .call(d3.axisBottom(xScale)
+        .tickFormat(d3.format("d")));
 
+    svg1_max.append("g")
+        .call(d3.axisLeft(yScale));
 
     // 6.a: ADD LABELS FOR CHART 1
 
