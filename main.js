@@ -60,64 +60,34 @@ d3.csv("weather.csv").then(data => {
         .range([height, 0]);
 
     
-        /*    const tempCategories = ["actualMax", "avgMax", "recordMax"];
-
-
-                const categories = d3.rollup(tempCategories,
-                    v => d3.rollup(v,
-                        values => values.length,
-                        d => d.date
-                    ),
-                    d => d.categoryGroup
-                );
-
-
-                const colorScale = d3.scaleOrdinal()
-                    .domain(Array.from(categories.keys()))
-                    .range(d3.schemeCategory10); */
+    const maxType = Array.from(new Set(pivotedData.map(d => d.measurement)))
+    
+    const colorScale = d3.scaleOrdinal()
+        .domain(maxType)
+        .range(d3.schemeCategory10);
 
     // 4.a: PLOT DATA FOR CHART 1
-    const grouped = d3.group(pivotedData, d => d.measurement);
-        console.log(grouped)
+    const lineData = d3.groups(pivotedData, d => d.measurement);
 
-     const line = d3.line()
+    const line = d3.line()
         .x(d => xScale(d.date))
         .y(d => yScale(d.maxTemperature)); 
-
-    const lineData = Array.from(grouped.entries());
 
     svg1_max.selectAll("path")
         .data(lineData)
         .enter()
         .append("path")
         .attr("class", "data-line")
-        .attr("d", d => {
-            const category = d[0];
-            const map = d[1];
-            const values = Array.from(map.entries())
-                .map(([date, maxTemperature]) => ({ date, maxTemperature }));
-            return line(values);
-        })
-        .style("stroke", "steelblue")
+        .attr("d", ([measurement, values]) => line(values))
+        .style("stroke", colorScale)
         .style("fill", "none")
         .style("stroke-width", 2);
-
-    
-    /*    svg1_max.selectAll("path")
-            .data(grouped)
-            .enter()
-            .append("path")
-            .attr("class", "data-line")
-            .attr("d", d3.line()
-                .x(d => xScale(d.date))
-                .y(d => yScale(d.maxTemperature))
-            ) */
 
     // 5.a: ADD AXES FOR CHART 1
     svg1_max.append("g")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(xScale)
-        .tickFormat(d3.format("d")));
+        .tickFormat(d3.timeFormat("%b %Y")));
 
     svg1_max.append("g")
         .call(d3.axisLeft(yScale));
