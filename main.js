@@ -3,16 +3,13 @@ const margin = { top: 50, right: 30, bottom: 60, left: 70 };
 const width = 900 - margin.left - margin.right;
 const height = 400 - margin.top - margin.bottom;
 
-// Create SVG containers for both charts
+// Create SVG containers for charts
 const svg1_max = d3.select("#lineChart1") // If you change this ID, you must change it in index.html too
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
-
-// (If applicable) Tooltip element for interactivity
-// const tooltip = ...
 
 // 2.a: LOAD...
 d3.csv("weather.csv").then(data => {
@@ -108,7 +105,8 @@ d3.csv("weather.csv").then(data => {
         .attr("x", width / 2)
         .attr("y", height + margin.bottom - 10)
         .attr("text-anchor", "middle")
-        .text("Date");
+        .text("Date")
+        .style("font-size", "14px");
 
     svg1_max.append("text")
         .attr("class", "axis-label")
@@ -116,14 +114,15 @@ d3.csv("weather.csv").then(data => {
         .attr("y", -margin.left + 20)
         .attr("x", -height / 2)
         .attr("text-anchor", "middle")
-        .text("Temperature (°F)");
+        .text("Temperature (°F)")
+        .style("font-size", "14px");
 
     const legend = svg1_max.selectAll(".legend")
         .data(lineData)
         .enter()
         .append("g")
         .attr("class", "legend")
-        .attr("transform", (d, i) => `translate(${width - 150}, ${i * 20 - 30})`);
+        .attr("transform", (d, i) => `translate(${width - 150}, ${i * 20 - 45})`);
 
     legend.append("rect")
         .attr("x", -50)
@@ -145,6 +144,7 @@ d3.csv("weather.csv").then(data => {
         svg1_max.selectAll(".axis-ticks").remove();
 
         const filteredData = data.filter(d => d.city_full === selectedCategory);
+
 
             // -- COPIED MOST POF THE CODES ABOVE SO THAT THE FILTERS ARE RE-PIVOTED AND RE-DRAWN FOR ALL 3 LINES
         const groupedData = d3.groups(filteredData, d => d.date)
@@ -210,6 +210,7 @@ d3.csv("weather.csv").then(data => {
             .style("font-size", "24px")
             .style("font-weight", "bold");
     }
+    
 
     d3.select("#categorySelect").on("change", function() {
         var selectedCategory = d3.select(this).property("value");
