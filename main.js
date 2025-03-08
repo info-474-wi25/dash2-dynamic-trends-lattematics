@@ -27,8 +27,7 @@ d3.csv("weather.csv").then(data => {
         d.recordMax = +d.record_max_temp;
     });
         //console.log("Raw data:", data);
-
-
+    
     const filteredData = data.filter(d => d.city_full === "Indianapolis, IN");
         //console.log("Filtered data 1:", filteredData);
 
@@ -85,20 +84,23 @@ d3.csv("weather.csv").then(data => {
 
     // 5.a: ADD AXES FOR CHART 1
     svg1_max.append("g")
+        .attr("class", "axis-ticks")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(xScale)
         .tickFormat(d3.timeFormat("%b %Y")));
 
     svg1_max.append("g")
+        .attr("class", "axis-ticks")
         .call(d3.axisLeft(yScale));
 
     // 6.a: ADD LABELS FOR CHART 1
     svg1_max.append("text")
+        .attr("class", "city-text")
         .attr("x", width / 2)
         .attr("y", -margin.top / 2)
         .attr("text-anchor", "middle")
-        .text("THIS CITY")
-        .style("font-size", "16px")
+        .text("Indianapolis, IN")
+        .style("font-size", "24px")
         .style("font-weight", "bold");
 
     svg1_max.append("text")
@@ -137,6 +139,80 @@ d3.csv("weather.csv").then(data => {
         .text((d, i) => maxType[i]);
         
     // 7.a: ADD INTERACTIVITY FOR CHART 1
-    
+    function updateChart(selectedCategory) {
+        svg1_max.selectAll("path").remove();
+        svg1_max.selectAll(".city-text").remove();
+        svg1_max.selectAll(".axis-ticks").remove();
 
+        const filteredData = data.filter(d => d.city_full === selectedCategory);
+
+            // -- COPIED MOST POF THE CODES ABOVE SO THAT THE FILTERS ARE RE-PIVOTED AND RE-DRAWN FOR ALL 3 LINES
+        const groupedData = d3.groups(filteredData, d => d.date)
+        .map(([date, entries]) => ({
+            date,
+            actualMax: d3.mean(entries, e => e.actualMax),
+            avgMax: d3.mean(entries, e => e.avgMax),
+            recordMax: d3.mean(entries, e => e.recordMax)
+        }));
+
+        const pivotedData = groupedData.flatMap(({ date, actualMax, avgMax, recordMax }) => [
+            { date, maxTemperature: actualMax, measurement: "Actual Max" },
+            { date, maxTemperature: avgMax, measurement: "Average Max" },
+            { date, maxTemperature: recordMax, measurement: "Record Max" }
+        ]);
+
+        const xScale = d3.scaleLinear()
+            .domain(d3.extent(pivotedData, d => d.date))
+            .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(pivotedData, d => d.maxTemperature)])
+            .range([height, 0]);
+
+        const maxType = Array.from(new Set(pivotedData.map(d => d.measurement)))
+        
+        const colorScale = d3.scaleOrdinal()
+            .domain(maxType)
+            .range(["#11b400", "#0a6900", "#f1c800"]);
+
+        const lineData = d3.groups(pivotedData, d => d.measurement);
+
+        const line = d3.line()
+            .x(d => xScale(d.date))
+            .y(d => yScale(d.maxTemperature)); 
+
+        svg1_max.selectAll("path")
+            .data(lineData)
+            .enter()
+            .append("path")
+            .attr("class", "data-line")
+            .attr("d", ([measurement, values]) => line(values))
+            .style("stroke", colorScale)
+            .style("fill", "none")
+            .style("stroke-width", 2);
+
+        svg1_max.append("g")
+            .attr("class", "axis-ticks")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(xScale)
+            .tickFormat(d3.timeFormat("%b %Y")));
+
+        svg1_max.append("g")
+            .attr("class", "axis-ticks")
+            .call(d3.axisLeft(yScale));
+
+        svg1_max.append("text")
+            .attr("class", "city-text")
+            .attr("x", width / 2)
+            .attr("y", -margin.top / 2)
+            .attr("text-anchor", "middle")
+            .text(selectedCategory)
+            .style("font-size", "24px")
+            .style("font-weight", "bold");
+    }
+
+    d3.select("#categorySelect").on("change", function() {
+        var selectedCategory = d3.select(this).property("value");
+        updateChart(selectedCategory);
+    });
 });
