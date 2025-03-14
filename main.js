@@ -60,7 +60,7 @@ d3.csv("weather.csv").then(data => {
     
     const colorScale = d3.scaleOrdinal()
         .domain(maxType)
-        .range(["#11b400", "#0a6900", "#f1c800"]);
+        .range(["#11b400", "#000000", "#f1c800"]);
 
     // 4.a: PLOT DATA FOR CHART 1
     const lineData = d3.groups(pivotedData, d => d.measurement);
@@ -84,6 +84,7 @@ d3.csv("weather.csv").then(data => {
         .attr("class", "axis-ticks")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(xScale)
+        //.tickValues(d3.range(Jun ))
         .tickFormat(d3.timeFormat("%b %Y")));
 
     svg1_max.append("g")
@@ -96,7 +97,7 @@ d3.csv("weather.csv").then(data => {
         .attr("x", width / 2)
         .attr("y", -margin.top / 2)
         .attr("text-anchor", "middle")
-        .text("Indianapolis, IN")
+        .text("Max Temperatures for Indianapolis, IN")
         .style("font-size", "24px")
         .style("font-weight", "bold");
 
@@ -122,7 +123,7 @@ d3.csv("weather.csv").then(data => {
         .enter()
         .append("g")
         .attr("class", "legend")
-        .attr("transform", (d, i) => `translate(${width - 150}, ${i * 20 - 45})`);
+        .attr("transform", (d, i) => `translate(${width - 120}, ${i * 20 + 200})`);
 
     legend.append("rect")
         .attr("x", -50)
@@ -173,7 +174,7 @@ d3.csv("weather.csv").then(data => {
         
         const colorScale = d3.scaleOrdinal()
             .domain(maxType)
-            .range(["#11b400", "#0a6900", "#f1c800"]);
+            .range(["#11b400", "#000000", "#f1c800"]);
 
         const lineData = d3.groups(pivotedData, d => d.measurement);
 
@@ -206,7 +207,7 @@ d3.csv("weather.csv").then(data => {
             .attr("x", width / 2)
             .attr("y", -margin.top / 2)
             .attr("text-anchor", "middle")
-            .text(selectedCategory)
+            .text("Max Temperatures for " + selectedCategory)
             .style("font-size", "24px")
             .style("font-weight", "bold");
     }
