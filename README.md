@@ -3,7 +3,7 @@
 ### DATA TOPIC & SOURCE
 [Weather](https://drive.google.com/file/d/1akt4PRpmfoST-ENeh6wVwtk5zXFt4Goj/view?usp=drive_link)\
 Source: [Weather History & Data Archive | Weather Underground](https://www.wunderground.com/history)\
-Documentation: [Weather Documentation - Google Docs](https://docs.google.com/document/d/15HiHTsKK8wbD6lOnJ1OmwlQJWHq4I1HsKmQBMVJanOc/edit?tab=t.0)
+Documentation: [Weather Documentation - Google Docs](https://docs.google.com/document/d/15HiHTsKK8wbD6lOnJ1OmwlQJWHq4I1HsKmQBMVJanOc/edit?tab=t.0)\
 **Brief Explanation**: Weather Underground collects and compiles real-time weather information from major cities, as available through web sources.\
 **Row**: The weather and temperature information for a city for the day.\
 **Data types & Units**: 
@@ -11,9 +11,11 @@ Documentation: [Weather Documentation - Google Docs](https://docs.google.com/doc
 - Year as integer 
 - Temperatures (°F) as integer
 - Precipitation (in) as double/float
-- Location information as string/characters\
+- Location information as string/characters
+
 **Unfamiliar words & Meaning**: 
-Precipitation is a bit unfamiliar but it’s pretty much just rain (or things that fall from the sky)\
+Precipitation is a bit unfamiliar but it’s pretty much just rain (or things that fall from the sky)
+
 **Additional Questions**: 
 1. Is the CSV only for the United States?
 From the looks of it, yes, they are cities in the United States.
@@ -26,29 +28,29 @@ Actual is the amount of precipitation for that day and average is the mean as ca
 ### SKETCH 
 **Max temperatures (record max, actual max, average max) for a city**
 ![Sketch of Max temperatures (record max, actual max, average max) for a city](/img/1.png)\
-X-axis: date \
-Data type: date \
-Unit: day (increments of 1 day)\
-Y-axis: temperature \
-	Data type: numeric\
-	Range/Max value: 100s\
-	Unit: °F\
-	Interactive element: dropdown menu to change city \
-	Transformation of data: none expected \
-	Visualization type: line graph because I’m visualizing in relation to time.\
+**X-axis**: date \
+**Data type**: date \
+**Unit**: day (increments of 1 day)\
+**Y-axis**: temperature \
+**Data type**: numeric\
+**Range/Max value**: 100s\
+**Unit**: °F\
+**Interactive element**: dropdown menu to change city \
+**Transformation of data**: none expected \
+**Visualization type**: line graph because I’m visualizing in relation to time.
 
 **Total changes in temperature (max minus min temp) for a city**
 ![Sketch of Total changes in temperature (max minus min temp) for a city](/img/2.png)\
-X-axis: date \
-Data type: date \
-Unit: day (increments of 1 day)\
-Y-axis: temperature (actual max temp minus actual min temp for the day)\
-	Data type: numeric\
-	Range/Max value: 100s\
-	Unit: °F\
-	Interactive element: dropdown menu to change city \
-Transformation of data: need to calculate the difference in temperature to get the actual max temp minus actual min temp for each day.\
-	Visualization type: line graph because I’m visualizing in relation to time. \
+**X-axis**: date \
+**Data type**: date \
+**Unit**: day (increments of 1 day)\
+**Y-axis**: temperature (actual max temp minus actual min temp for the day)\
+**Data type**: numeric\
+**Range/Max value**: 100s\
+**Unit**: °F\
+**Interactive element**: dropdown menu to change city \
+**Transformation of data**: need to calculate the difference in temperature to get the actual max temp minus actual min temp for each day.\
+**Visualization type**: line graph because I’m visualizing in relation to time. 
 
 ## 2. Draft Dashboard
 ### NO-CODE DRAFT 
@@ -64,7 +66,7 @@ The max temperatures of Charlotte of 2014 to 2015 doesn’t go beyond the histor
 **Starting Progress**: 
 ![Starting viz before revision](/img/4.png)
 ### CRITIQUE
-Self
+**Self**
 - The current design where the city name gets updated when city dropdown is changed is good
 - The current design where the legend has colors corresponding to the type of max visualized is good
 - The x-axis is pretty crowded, I should increase the distance between the dates
@@ -72,12 +74,14 @@ Self
 - Maybe remove “Record Max” if viewers thinks it’s distracting 
 - If there’s more time, I would like to be able to add/remove the lines on the graph with a checkbox 
 - I would also want to try adding tooltip to the line charts so the exact temperatures can be seen\
-Peer
+
+**Peer**
 - Font size for the y and x axis would be better if it’s bigger
 - If possible rotate the x axis so that the dates are easier to read
 - Have the title/header be on one line 
 - Why these city/states? (if possible to get more data, have the chart to give more options)\
-Instructor
+
+**Instructor**
 - Have the header and the city (that changes with interactivity) on the same line, as one title 
 - Change the color of the line so it’s 3 distinct colors (light green and yellow is fine, can change the dark green to be like black or something)
 	
