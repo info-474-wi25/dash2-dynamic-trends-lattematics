@@ -84,12 +84,14 @@ d3.csv("weather.csv").then(data => {
         .attr("class", "axis-ticks")
         .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(xScale)
-        //.tickValues(d3.range(Jun ))
-        .tickFormat(d3.timeFormat("%b %Y")));
+        .ticks(6)
+        .tickFormat(d3.timeFormat("%b %d, %Y")))
+        .style("font-size", "11px");
 
     svg1_max.append("g")
         .attr("class", "axis-ticks")
-        .call(d3.axisLeft(yScale));
+        .call(d3.axisLeft(yScale))
+        .style("font-size", "11px");
 
     // 6.a: ADD LABELS FOR CHART 1
     svg1_max.append("text")
@@ -107,7 +109,7 @@ d3.csv("weather.csv").then(data => {
         .attr("y", height + margin.bottom - 10)
         .attr("text-anchor", "middle")
         .text("Date")
-        .style("font-size", "14px");
+        .style("font-size", "16px");
 
     svg1_max.append("text")
         .attr("class", "axis-label")
@@ -116,7 +118,7 @@ d3.csv("weather.csv").then(data => {
         .attr("x", -height / 2)
         .attr("text-anchor", "middle")
         .text("Temperature (°F)")
-        .style("font-size", "14px");
+        .style("font-size", "16px");
 
     const legend = svg1_max.selectAll(".legend")
         .data(lineData)
@@ -196,11 +198,14 @@ d3.csv("weather.csv").then(data => {
             .attr("class", "axis-ticks")
             .attr("transform", `translate(0,${height})`)
             .call(d3.axisBottom(xScale)
-            .tickFormat(d3.timeFormat("%b %Y")));
+            .ticks(6)
+            .tickFormat(d3.timeFormat("%b %d, %Y")))
+            .style("font-size", "11px");
 
         svg1_max.append("g")
             .attr("class", "axis-ticks")
-            .call(d3.axisLeft(yScale));
+            .call(d3.axisLeft(yScale))
+            .style("font-size", "11px");
 
         svg1_max.append("text")
             .attr("class", "city-text")
