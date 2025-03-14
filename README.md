@@ -2,8 +2,8 @@
 ## 1. Data Exploration
 ### DATA TOPIC & SOURCE
 [Weather](https://drive.google.com/file/d/1akt4PRpmfoST-ENeh6wVwtk5zXFt4Goj/view?usp=drive_link)\
-Source: [Weather History & Data Archive | Weather Underground](https://www.wunderground.com/history)\
-Documentation: [Weather Documentation - Google Docs](https://docs.google.com/document/d/15HiHTsKK8wbD6lOnJ1OmwlQJWHq4I1HsKmQBMVJanOc/edit?tab=t.0)\
+**Source**: [Weather History & Data Archive | Weather Underground](https://www.wunderground.com/history)\
+**Documentation**: [Weather Documentation - Google Docs](https://docs.google.com/document/d/15HiHTsKK8wbD6lOnJ1OmwlQJWHq4I1HsKmQBMVJanOc/edit?tab=t.0)\
 **Brief Explanation**: Weather Underground collects and compiles real-time weather information from major cities, as available through web sources.\
 **Row**: The weather and temperature information for a city for the day.\
 **Data types & Units**: 
